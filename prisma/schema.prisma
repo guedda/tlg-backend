@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model rounds {
+  id        String   @id
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  taps      taps[]
+}
+
+model taps {
+  id        String   @id
+  userId    String
+  roundId   String
+  createdAt DateTime @default(now())
+  rounds    rounds   @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  users     users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roundId, id])
+  @@index([roundId])
+  @@index([userId, roundId])
+}
+
+model users {
+  id        String   @id
+  username  String   @unique
+  password  String
+  role      UserRole @default(SURVIVOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  taps      taps[]
+}
+
+enum UserRole {
+  SURVIVOR
+  ADMIN
+  NIKITA
+}
