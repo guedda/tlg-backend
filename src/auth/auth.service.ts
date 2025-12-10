@@ -32,7 +32,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Неверный пароль');
     }
 
     const token = this.jwtService.sign({ userId: user.id });
